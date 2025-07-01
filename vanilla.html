@@ -1,0 +1,26 @@
+<!-- 클릭 세는 앱 - vanilla JS vs React JS -->
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <span>total clicks : 0</span>
+    <button id="btn">click</button>
+  </body>
+  <script>
+    let counter = 0
+    const button = document.getElementById('btn')
+    const span = document.querySelector('span')
+
+    function handleClick() {
+      counter++
+      span.innerText = `total clicks : ${counter}`
+    }
+
+    button.addEventListener('click', handleClick)
+  </script>
+</html>
+
+<!-- 1. create html
+2. get by javascript
+3. detect events
+4. update the data
+5. update the html -->

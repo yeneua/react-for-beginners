@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script>
+    // createElement(html 태그, object로 된 property, content)
+    const root = document.getElementById('root')
+    const h3 = React.createElement(
+      'h3',
+      {
+        id: 'title',
+        color: 'blue', // html로 가는 props
+        onMouseEnter: () => console.log('mouseenter'), // event listener 등록 - on + event 형태로 작성하면 react js가 이벤트리스터로 인식
+      },
+      'hello i"m a span'
+    )
+
+    const btn = React.createElement(
+      'button',
+      { onClick: () => console.log('i am clicked') }, // event listner 등록
+      'click me'
+    )
+    const container = React.createElement('div', null, [h3, btn]) // container element는 div이고 property는 없음, content는 h3와 btn
+    // ReactDOM.render(span, root) // span을 root에 두어라. react element를 가지고 html에 배치해서 사용자에게 보여줌
+    ReactDOM.render(container, root) // 한번에 렌더하기
+  </script>
+</html>
+
+<!-- 
+react js - 어플리케이션이 interactive 하도록 만들어주는 library
+react dom - react element들을 html body에 둘 수 있도록 해줌(react element들을 html로 바꿔줌)
+-->
+
+<!--
+vanilla JS와 달리 React JS가 element를 생성함
+ React JS에게 업데이트 해야하는 HTML을 업데이트 하라고 할 것
+ React JS는 javascript에서 시작함
+-->
+
+<!--
+interactive한 어플리케이션
+ interactive한 어플리케이션에서 하는 작업들 모두가 event를 감지하는 일!
+ React JS에서는 statement 한 줄로 작성이 가능함
+ event listener 작성 대신 property에서 event 등록 가능
+ -->
