@@ -17,9 +17,9 @@
     }
 
     const render = () => {
-      ReactDOM.render(<Container />, root)
+      ReactDOM.render(<App />, root)
     }
-    const Container = () => (
+    const App = () => (
       <div>
         <h3>total clicks : {counter}</h3>
         <button onClick={countUp}>click me</button>
@@ -31,4 +31,6 @@
 </html>
 
 <!-- react JS는 UI에서 바뀐 부분만 업데이트 해줌!
-vanilla랑 비교하면 vanilla에서는 body, span이 같이 업데이트 되는 것을 알 수 있음 -->
+vanilla랑 비교하면 vanilla에서는 body, span이 같이 업데이트 되는 것을 알 수 있음
+Container 전체를 다시 생성하는 것이 아니라 바뀐 부분만 새로 생성함
+-->
