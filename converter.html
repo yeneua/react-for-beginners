@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const MinutesToHours = () => {
+      const [amount, setAmount] = React.useState(0)
+      const [inverted, setInverted] = React.useState(false)
+
+      const onChange = (e) => {
+        console.log('wrote')
+        setAmount(e.target.value)
+      }
+
+      const reset = () => setAmount(0)
+
+      const onInvert = () => {
+        reset()
+        setInverted((current) => !current)
+      }
+
+      return (
+        <div>
+          <div>
+            <label htmlFor='minutes'>minutes</label>
+            <input
+              id='minutes'
+              placeholder='minutes'
+              type='number'
+              value={inverted ? amount * 60 : amount}
+              onChange={onChange} // input에 생기는 변화를 리스닝
+              disabled={inverted}
+            />
+          </div>
+          <h4>you want to convert {amount}</h4>
+          <div>
+            <label htmlFor='hours'>hours</label>
+            <input // onChange 이벤트가 없기 때문에 값을 바꿔도 바뀌지 않음
+              placeholder='hours'
+              type='number'
+              id='hours'
+              value={inverted ? amount : Math.round(amount / 60)}
+              disabled={!inverted}
+              onChange={onChange}
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onInvert}>
+            {inverted ? 'Turn back' : 'Invert'}
+          </button>
+        </div>
+      )
+    }
+
+    const KmToMiles = () => {
+      const [input, setInputs] = React.useState(0)
+      const [inverted, setInverted] = React.useState(false)
+      const onChange = (e) => {
+        setInputs(e.target.value)
+      }
+      const reset = () => {
+        setInputs(0)
+      }
+      const invert = () => {
+        reset()
+        setInverted(!inverted)
+      }
+      return (
+        <>
+          <h3> KM 2 M</h3>
+          <input
+            type='text'
+            placeholder='kilimeters'
+            onChange={onChange}
+            value={inverted ? input / 0.621371 : input}
+            disabled={inverted}
+          />
+          <input
+            type='text'
+            placeholder='miles'
+            onChange={onChange}
+            value={inverted ? input : input * 0.621371}
+            disabled={!inverted}
+          />
+          <br />
+          <button onClick={reset}>reset</button>
+          <button onClick={invert}>invert</button>
+        </>
+      )
+    }
+
+    const App = () => {
+      const [index, setIndex] = React.useState('xx')
+      const onSelect = (event) => {
+        console.log(event.target.value)
+        setIndex(event.target.value)
+      }
+      return (
+        <div>
+          <h1>Super Converter</h1>
+          <select value={index} onChange={onSelect}>
+            <option value='xx'>select</option>
+            <option value='0'>Minutes & Hours</option>
+            <option value='1'>Km & Miles</option>
+          </select>
+          <hr />
+          {index === 'xx' && 'select your units'}
+          {index === '0' && <MinutesToHours />}
+          {index === '1' && <KmToMiles />}
+        </div>
+      )
+    }
+    const root = document.getElementById('root')
+    ReactDOM.render(<App />, root)
+  </script>
+</html>
+
+<!-- modifier로 state를 변경한다면 컴포넌트는 새로운 데이터와 함께 새로고침 됨 -->
