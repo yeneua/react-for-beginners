@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    // <SaveBtn /> <- 이렇게 함수를 불러냄 ===> 함수형 컴포넌트
+    function SaveBtn() {
+      return (
+        <button
+          style={{
+            backgroundColor: 'tomato',
+            color: 'white',
+            padding: '10px 20px',
+            border: 0,
+            borderRadius: 10,
+          }}
+        >
+          Save Changes
+        </button>
+      )
+    }
+    const ConfirmButton = () => {
+      return (
+        <button
+          style={{
+            backgroundColor: 'tomato',
+            color: 'white',
+            padding: '10px 20px',
+            border: 0,
+            borderRadius: 10,
+          }}
+        >
+          confirm
+        </button>
+      )
+    }
+
+    // const Btn = ({ text }) => {
+    //   console.log(text)
+    //   return <button>{text}</button>
+    // }
+
+    function Btn({ text, big, changeValue }) {
+      // console.log(props) // 인수로 전달한 모든 것
+      console.log(`${text} was rendered`)
+      return (
+        <button
+          onClick={changeValue}
+          style={{
+            backgroundColor: 'tomato',
+            color: 'white',
+            padding: '10px 20px',
+            border: 0,
+            borderRadius: 10,
+            fontSize: big ? 18 : 16,
+          }}
+        >
+          {text}
+        </button>
+      )
+    }
+
+    const MemorizedBtn = React.memo(Btn)
+
+    const App = () => {
+      const [value, setValue] = React.useState('save changes')
+      // 부모의 상태를 바꾸는 함수 <- 자식이 실행시킴
+      const changeValue = () => {
+        setValue('revert change')
+      }
+      return (
+        <div>
+          {value}
+          <MemorizedBtn text={value} big={true} changeValue={changeValue} />
+          <MemorizedBtn text='confirm' big={false} />
+        </div>
+      )
+    }
+    const root = document.getElementById('root')
+    ReactDOM.render(<App />, root)
+  </script>
+</html>
+
+<!--  <Btn text='save' />
+  react는 Btn 함수를 호출해서 text를 전달함 -> Btn({text:'save'}) -->
+
+<!-- 
+<Btn text={value} big={true} onClick={changeValue} /> // 이벤트 리스너가 아니고 Btn으로 들어가는 프로퍼티임!, onClick은 text, big과 같은 prop 이름임
+<button onClick={}/> // 이벤트 리스터로 동작!
+  -->
+
+<!-- 
+'''
+save changes was rendered
+Inline Babel script:41 confirm was rendered
+Inline Babel script:41 revert change was rendered
+Inline Babel script:41 confirm was rendered
+'''
+컴포넌트가 상태를 바꾼다면 다시 render하기 때문에
+changeValue가 호출되면 value가 바뀌면서 App 컴포넌트 즉, 부모 컴포넌트가 다시 render됨
+따라서 confirm 버튼은 아무런 변화가 없지만 다시 그려짐(렌더링됨) 
+-->
+
+<!-- 
+'''
+save changes was rendered
+Inline Babel script:41 confirm was rendered
+Inline Babel script:41 revert change was rendered
+
+'''
+상태가 바뀌는 버튼만 리렌더링 하고 싶음
+const MemorizedBtn = React.memo(Btn)
+부모 컴포넌트가 변경될때 prop이 바뀌는 자식 컴포넌트만 리렌더링 - 첫번째 버튼은 prop에 state가 연결되어있고 그 state가 변했기 때문에 리렌더링
+props가 변하면 리렌더링 해
+-->
