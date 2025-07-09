@@ -3,9 +3,11 @@
   <body>
     <div id="root"></div>
   </body>
-  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+  <!-- propTypes - 잘못된 타입의 prop을 전달했을때 에러-->
   <script type="text/babel">
     // <SaveBtn /> <- 이렇게 함수를 불러냄 ===> 함수형 컴포넌트
     function SaveBtn() {
@@ -44,7 +46,8 @@
     //   return <button>{text}</button>
     // }
 
-    function Btn({ text, big, changeValue }) {
+    function Btn({ text, big, changeValue, fontSize = 10 }) {
+      // fontSize 기본값 부여
       // console.log(props) // 인수로 전달한 모든 것
       console.log(`${text} was rendered`)
       return (
@@ -56,7 +59,8 @@
             padding: '10px 20px',
             border: 0,
             borderRadius: 10,
-            fontSize: big ? 18 : 16,
+            // fontSize: big ? 18 : 16,
+            fontSize, // fontSize : fontSize랑 동일
           }}
         >
           {text}
@@ -64,7 +68,14 @@
       )
     }
 
-    const MemorizedBtn = React.memo(Btn)
+    // const MemorizedBtn = React.memo(Btn)
+
+    Btn.propTypes = {
+      text: PropTypes.string.isRequired,
+      big: PropTypes.boolean,
+      changeValue: PropTypes.func,
+      fontSize: PropTypes.number,
+    }
 
     const App = () => {
       const [value, setValue] = React.useState('save changes')
@@ -75,8 +86,23 @@
       return (
         <div>
           {value}
-          <MemorizedBtn text={value} big={true} changeValue={changeValue} />
-          <MemorizedBtn text='confirm' big={false} />
+          {/*<MemorizedBtn text={value} big={true} changeValue={changeValue} />
+          <MemorizedBtn text='confirm' big={false} />*/}
+          <Btn
+            text={value}
+            big={true}
+            changeValue={changeValue}
+            fontSize={24}
+          />
+          {/* prop 타입 다르게 전달(에러는 아님 화면 나옴 경고임) - Warning: Failed prop type: Invalid prop `text` of type `number` supplied to `Btn`, expected `string`. */}
+          <Btn
+            text={15}
+            big={'hello'}
+            changeValue={changeValue}
+            fontSize={'hi'}
+          />
+          {/* isRequired로 작성한 prop을 전달X - Warning: Failed prop type: The prop `text` is marked as required in `Btn`, but its value is `undefined`.*/}
+          <Btn big={'required'} changeValue={changeValue} />
         </div>
       )
     }
